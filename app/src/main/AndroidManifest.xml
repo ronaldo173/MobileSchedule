@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".FacultetChooseActivity"
+            android:name=".StartFileChooseActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -19,8 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
+            android:name=".Activity_second_facult_choose"
             android:label="@string/title_activity_second" >
+        </activity>
+        <activity
+            android:name=".Activity_third_group_choose"
+            android:label="@string/title_activity_activity_third_group_choose" >
         </activity>
     </application>
 

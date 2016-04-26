@@ -31,7 +31,8 @@ public class OpenFileDialog extends AlertDialog.Builder {
     private String accessDeniedMessage;
     private File resultFile;
 
-    public OpenFileDialog(Context context) {
+
+    public OpenFileDialog(final Context context) {
         super(context);
         title = createTitle(context);
         changeTitle();
@@ -46,6 +47,7 @@ public class OpenFileDialog extends AlertDialog.Builder {
                     public void onClick(DialogInterface dialog, int which) {
                         if (selectedIndex > -1 && listener != null) {
                             listener.OnSelectedFile(listView.getItemAtPosition(selectedIndex).toString());
+                            String s = listView.getItemAtPosition(selectedIndex).toString();
                         }
                     }
                 })
@@ -230,14 +232,17 @@ public class OpenFileDialog extends AlertDialog.Builder {
                 if (file.isDirectory()) {
                     currentPath = file.getPath();
                     RebuildFiles(adapter);
+
                 } else {
+                    resultFile =file;
+
+
                     if (index != selectedIndex)
                         selectedIndex = index;
                     else
                         selectedIndex = -1;
                     adapter.notifyDataSetChanged();
 
-                    resultFile = file;
                 }
             }
         });
@@ -263,7 +268,6 @@ public class OpenFileDialog extends AlertDialog.Builder {
                 if (file.isDirectory()) {
                     setDrawable(view, folderIcon);
                 } else {
-                    resultFile = file;
                     setDrawable(view, fileIcon);
                     if (selectedIndex == position)
                         view.setBackgroundColor(getContext().getResources().getColor(android.R.color.holo_blue_dark));

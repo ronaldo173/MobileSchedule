@@ -13,9 +13,16 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by Developer on 23.04.2016.
+ * It's util class for reading from excel
  */
 public class ReadSheduler {
+    private static File file = null;
+
+    /**
+     * ReadSheduler is FAO(file access object), not for creating. Use static methods
+     */
+    private ReadSheduler() {
+    }
 
     public static void main(String[] args) throws IOException {
         File fileExcel = new File("Shududer_1kurs.xls");
@@ -32,12 +39,6 @@ public class ReadSheduler {
     }
 
     /**
-     * ReadSheduler is FAO(file access object), not for creating. Use static methods
-     */
-    private ReadSheduler(){}
-
-
-    /**
      * read from excel, return map of facultets+groups in each facultet with column# of group
      *
      * @param fileExcel
@@ -45,6 +46,7 @@ public class ReadSheduler {
      * @throws IOException
      */
     public static LinkedHashMap<String, List<Map<String, Integer>>> getFacGroupsFromExcel(File fileExcel) throws IOException {
+        file = fileExcel;
         LinkedHashMap<String, List<Map<String, Integer>>> map = new LinkedHashMap<>();
         Map<String, Integer> mapFacultetNameGroupStartNum = new LinkedHashMap<>();
         Map<Integer, Integer> mapStartFinishGroup = new LinkedHashMap<>();
@@ -183,4 +185,20 @@ public class ReadSheduler {
         }
         return list.toArray(new String[list.size()]);
     }
+
+    public static List<Map<String, Integer>> getGroupsByFacultet(String facultet) {
+        List<Map<String, Integer>> result = null;
+
+        try {
+            LinkedHashMap<String, List<Map<String, Integer>>> facGroupsFromExcel = getFacGroupsFromExcel(file);
+            result = facGroupsFromExcel.get(facultet);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
 }

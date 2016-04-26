@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="schedule.mobile.android.mydiplom.ru.mobileschedule.FacultetChooseActivity">
+    tools:context="schedule.mobile.android.mydiplom.ru.mobileschedule.StartFileChooseActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_facultet_choose" />
+    <include layout="@layout/content_start_file_choose_activity" />
 
 </android.support.design.widget.CoordinatorLayout>
