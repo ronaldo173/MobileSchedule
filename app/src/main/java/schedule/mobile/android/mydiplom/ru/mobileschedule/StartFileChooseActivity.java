@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import myDiplom.excel.read.FAO.ReadSheduler;
 import myDiplom.myDialogs.OpenFileDialog;
 
 import java.io.File;
@@ -73,6 +74,7 @@ public class StartFileChooseActivity extends AppCompatActivity {
                 } else {
                     ourChosenFile = "Выбран файл: " + fileForRead.toString();
                     buttonGo.setVisibility(View.VISIBLE);
+                    ReadSheduler.setFile(fileForRead);
                 }
 
                 textView.setText(ourChosenFile);

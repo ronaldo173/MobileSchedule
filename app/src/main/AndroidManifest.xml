@@ -26,6 +26,14 @@
             android:name=".Activity_third_group_choose"
             android:label="@string/title_activity_activity_third_group_choose" >
         </activity>
+        <activity
+            android:name=".Activity_forth_day_choose"
+            android:label="@string/title_activity_forth_day_choose" >
+        </activity>
+        <activity
+            android:name=".Activity_fifth_shedule_for_group"
+            android:label="@string/title_activity_activity_fifth_shedule_for_group" >
+        </activity>
     </application>
 
 </manifest>

@@ -5,4 +5,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_activity_third_group_choose">activity_third_group_choose</string>
+    <string name="title_activity_forth_day_choose">ForthDayChooseActivity</string>
+    <string name="title_activity_activity_fifth_shedule_for_group">Activity_fifth_shedule_for_group</string>
 </resources>

@@ -24,20 +24,6 @@ public class ReadSheduler {
     private ReadSheduler() {
     }
 
-    public static void main(String[] args) throws IOException {
-        File fileExcel = new File("Shududer_1kurs.xls");
-
-        String[] strings = readFromExcelFacultets(fileExcel);
-        for (String string : strings) {
-            System.out.println(string);
-        }
-
-//        LinkedHashMap<String, List<Map<String, Integer>>> facGroupsFromExcel = getFacGroupsFromExcel(fileExcel);
-//        for (Map.Entry<String, List<Map<String, Integer>>> entry : facGroupsFromExcel.entrySet()) {
-//            System.out.println(entry.getKey() + " = " + entry.getValue());
-//        }
-    }
-
     /**
      * read from excel, return map of facultets+groups in each facultet with column# of group
      *
@@ -136,7 +122,6 @@ public class ReadSheduler {
         return map;
     }
 
-
     /**
      * read from excel file facultets, return array of fac
      *
@@ -186,6 +171,7 @@ public class ReadSheduler {
         return list.toArray(new String[list.size()]);
     }
 
+
     public static List<Map<String, Integer>> getGroupsByFacultet(String facultet) {
         List<Map<String, Integer>> result = null;
 
@@ -200,5 +186,56 @@ public class ReadSheduler {
         return result;
     }
 
+    public static LinkedHashMap<String, CellAddress> getDaysOfWeek() throws IOException {
+        LinkedHashMap<String, CellAddress> mapDayCellAddress = new LinkedHashMap<>();
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
+            HSSFSheet sheet = workbook.getSheetAt(0);
 
+            for (Row row : sheet) {
+                Cell cell = row.getCell(0);
+                if (cell == null || row.getRowNum() < 7) {
+                    continue;
+                }
+
+                if (!cell.getStringCellValue().isEmpty()) {
+                    mapDayCellAddress.put(cell.getStringCellValue(), cell.getAddress());
+                }
+            }
+        } finally {
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+        }
+        return mapDayCellAddress;
+    }
+
+    public static void main(String[] args) throws IOException {
+        File fileExcel = new File("Shududer_1kurs.xls");
+        setFile(fileExcel);
+
+//        String[] strings = readFromExcelFacultets(fileExcel);
+//        for (String string : strings) {
+//            System.out.println(string);
+//        }
+
+//        LinkedHashMap<String, List<Map<String, Integer>>> facGroupsFromExcel = getFacGroupsFromExcel(fileExcel);
+//        for (Map.Entry<String, List<Map<String, Integer>>> entry : facGroupsFromExcel.entrySet()) {
+//            System.out.println(entry.getKey() + " = " + entry.getValue());
+//        }
+
+        List<Map<String, Integer>> groupsByFacultet = getGroupsByFacultet("01.03.04 Прикладная математика");
+        for (Map<String, Integer> map : groupsByFacultet) {
+            for (String s : map.keySet()) {
+                System.out.println(s);
+            }
+        }
+
+    }
+
+    public static void setFile(File file) {
+        ReadSheduler.file = file;
+    }
 }
