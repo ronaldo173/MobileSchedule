@@ -7,4 +7,7 @@
     <string name="title_activity_activity_third_group_choose">activity_third_group_choose</string>
     <string name="title_activity_forth_day_choose">ForthDayChooseActivity</string>
     <string name="title_activity_activity_fifth_shedule_for_group">Activity_fifth_shedule_for_group</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

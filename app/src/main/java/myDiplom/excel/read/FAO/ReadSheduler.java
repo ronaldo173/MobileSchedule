@@ -1,5 +1,6 @@
 package myDiplom.excel.read.FAO;
 
+import myDiplom.model.Lesson;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -16,12 +17,121 @@ import java.util.*;
  * It's util class for reading from excel
  */
 public class ReadSheduler {
-    private static File file = null;
+    private static File file;
+    private static LinkedHashMap<String, CellAddress> daysOfWeek;
 
     /**
      * ReadSheduler is FAO(file access object), not for creating. Use static methods
      */
     private ReadSheduler() {
+    }
+
+
+    /**
+     * Get shedule by group and day! return map with keys 1,2 depend on week!
+     * @param chosenGroupAndColumn
+     * @param cellAddressOfDay
+     * @param chosenDay
+     * @return
+     * @throws IOException
+     */
+    public static Map<Integer, List<Lesson>>
+                getSheduleByDay(Map.Entry<String, Integer> chosenGroupAndColumn, CellAddress cellAddressOfDay, String chosenDay) throws IOException {
+
+        Map<Integer, List<Lesson>> mapWeekLessons = new HashMap<>();
+        List<Lesson> listFirstWeek = new ArrayList<>();
+        List<Lesson> listSecondWeek = new ArrayList<>();
+        mapWeekLessons.put(0, listFirstWeek);
+        mapWeekLessons.put(1, listSecondWeek);
+
+
+        try {
+            daysOfWeek = getDaysOfWeek();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
+            HSSFSheet sheet = workbook.getSheetAt(0);
+
+
+            int rowStart = cellAddressOfDay.getRow();
+            int rowEnd;
+
+            //get last row number of day
+            List<String> list = new ArrayList<>(daysOfWeek.keySet());
+            try {
+                String nextDay = list.get(list.indexOf(chosenDay) + 1);
+                rowEnd = daysOfWeek.get(nextDay).getRow() - 1;
+            } catch (Exception e) {
+                rowEnd = sheet.getLastRowNum() - 1;
+            }
+
+            System.out.println(rowStart + "..." + rowEnd);
+            for (Row row : sheet) {
+                if (row.getRowNum() < rowStart) {
+                    continue;
+                }
+                if (row.getRowNum() > rowEnd) {
+                    break;
+                }
+
+                //get time of lessons and it's row
+                String timeLesson = row.getCell(1).getStringCellValue();
+                if (!timeLesson.isEmpty()) {
+                    Integer columnOfGroup = chosenGroupAndColumn.getValue();
+                    Lesson lessonFirstWeek = new Lesson(timeLesson);
+                    Lesson lessonSecondWeek = new Lesson(timeLesson);
+
+                    //time row#
+                    int rowNum = row.getRowNum();
+                    System.out.println(timeLesson + "...row:" + rowNum);
+
+                    //loop for putting values in lesson if exists
+                    for (int i = 0; i < 6; i++) {
+                        String strOfCell = sheet.getRow(rowNum + i).getCell(columnOfGroup).getStringCellValue();
+                        if (strOfCell != null) {
+                            switch (i) {
+                                //firstWeek
+                                case 0:
+                                    lessonFirstWeek.setLessonName(strOfCell);
+                                    break;
+                                case 1:
+                                    lessonFirstWeek.setTeachersName(strOfCell);
+                                    break;
+                                case 2:
+                                    lessonFirstWeek.setKabinet(strOfCell);
+                                    break;
+                                //secondWeek
+                                case 3:
+                                    lessonSecondWeek.setLessonName(strOfCell);
+                                    break;
+                                case 4:
+                                    lessonSecondWeek.setTeachersName(strOfCell);
+                                    break;
+                                case 5:
+                                    lessonSecondWeek.setKabinet(strOfCell);
+                            }
+                        }
+                    }
+
+                    listFirstWeek.add(lessonFirstWeek);
+                    listSecondWeek.add(lessonSecondWeek);
+                }
+
+            }
+        } finally {
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+        }
+
+
+        return mapWeekLessons;
     }
 
     /**
@@ -238,4 +348,5 @@ public class ReadSheduler {
     public static void setFile(File file) {
         ReadSheduler.file = file;
     }
+
 }
