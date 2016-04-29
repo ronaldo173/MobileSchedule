@@ -18,7 +18,6 @@ import java.io.File;
 
 
 public class StartFileChooseActivity extends AppCompatActivity {
-    private File fileExcel = new File("Shududer_1kurs.xls");
     private static File fileForRead = null;
 
     public static File getFileForRead() {
@@ -69,16 +68,26 @@ public class StartFileChooseActivity extends AppCompatActivity {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 String ourChosenFile = null;
 
-                if (fileForRead == null) {
-                    ourChosenFile = "Файл не выбран/выбрана папка";
-                    buttonGo.setVisibility(View.INVISIBLE);
-                } else {
-                    ourChosenFile = "Выбран файл: " + fileForRead.toString();
-                    buttonGo.setVisibility(View.VISIBLE);
-                    ReadSheduler.setFile(fileForRead);
-                }
+                try {
+                    if (fileForRead == null) {
+                        ourChosenFile = "Файл не выбран/выбрана папка";
+                        buttonGo.setVisibility(View.INVISIBLE);
+                    }
+                    else if (!fileForRead.getName().endsWith(".xls")){
+                        ourChosenFile = "Выбранный файл не расписание(расширение не .xml)";
+                        buttonGo.setVisibility(View.INVISIBLE);
 
-                textView.setText(ourChosenFile);
+                    }
+                    else {
+                        ourChosenFile = "Выбран файл: " + fileForRead.toString();
+                        buttonGo.setVisibility(View.VISIBLE);
+                        ReadSheduler.setFile(fileForRead);
+                    }
+
+                    textView.setText(ourChosenFile);
+                } catch (Exception e) {
+                    textView.setText("Проблемы с файлом!");
+                }
 
 
             }
